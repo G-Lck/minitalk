@@ -32,54 +32,65 @@ int	ft_atoi(const char *nptr)
 	return (sign * value);
 }
 
-void	handler(int signal)
+int	set_bits(int signum)
 {
-	int	a;
-
-	a = 0;
-
-	if (a == 0 && signal == SIGUSR1)
-	{
-		a++;
-	}
+	if (signum == SIGUSR1)
+		return (0);
+	else if (signum == SIGUSR2)
+		return (1);
+	return (0);
 }
 
-void	send_char_to_bits(int pid, unsigned char c)
+
+void	*ft_memset(void *s, int c, size_t n)
 {
-	int	i;
+	unsigned char	*temp;
+	size_t			i;
 
 	i = 0;
-	while (i <= 31)
+	temp = (unsigned char *) s;
+	while (i < n)
 	{
-		if ((c >> i) & 1)
-			kill(pid, SIGUSR1);
-		else
-			kill(pid, SIGUSR2);
+		temp[i] = (unsigned char)c;
 		i++;
-		signal(SIGUSR1, handler);
-		usleep(1000);
 	}
+	return (s);
+}
+
+char	bits_to_ascii(int *bits)
+{
+	int i;
+	int c;
+
+	i = 7;
+	c = 0;
+	while (i>=0)
+	{
+		c = 2 * c + bits[i];
+	}
+	return ((char) c);
+
 }
 
 void	write_bits_to_char(int signum, siginfo_t *info, void *context)
 {
-	static int	i = 0;
-	static int	bit = 0;
-	int			j;
+	static int	ix;
+	static int	bits[8];
+	char	c;
 
 	(void) context;
-	j = 1;
-	if (signum == SIGUSR1)
+	bits[ix] = set_bits(signum);
+	ix++;
+	if (ix == 7)
 	{
-		j <<= i;
-		bit |= j;
+		c = bits_to_ascii(bits);
+		write(1, &c, 1);
+		if (c == 0)
+			write(1, "\n", 1);
+		ix = 0;
+		ft_memset(bits, 0, 8);
 	}
-	i++;
-	if (i == 32)
-	{
-		write (1, &bit, 1);
-		bit = 0;
-		i = 0;
-		kill(info->si_pid, SIGUSR1);
-	}
+
+	kill(info->si_pid, SIGUSR1);
+	// exitfailure
 }
