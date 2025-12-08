@@ -32,16 +32,6 @@ int	ft_atoi(const char *nptr)
 	return (sign * value);
 }
 
-int	set_bits(int signum)
-{
-	if (signum == SIGUSR1)
-		return (0);
-	else if (signum == SIGUSR2)
-		return (1);
-	return (0);
-}
-
-
 void	*ft_memset(void *s, int c, size_t n)
 {
 	unsigned char	*temp;
@@ -57,40 +47,4 @@ void	*ft_memset(void *s, int c, size_t n)
 	return (s);
 }
 
-char	bits_to_ascii(int *bits)
-{
-	int i;
-	int c;
 
-	i = 7;
-	c = 0;
-	while (i>=0)
-	{
-		c = 2 * c + bits[i];
-	}
-	return ((char) c);
-
-}
-
-void	write_bits_to_char(int signum, siginfo_t *info, void *context)
-{
-	static int	ix;
-	static int	bits[8];
-	char	c;
-
-	(void) context;
-	bits[ix] = set_bits(signum);
-	ix++;
-	if (ix == 7)
-	{
-		c = bits_to_ascii(bits);
-		write(1, &c, 1);
-		if (c == 0)
-			write(1, "\n", 1);
-		ix = 0;
-		ft_memset(bits, 0, 8);
-	}
-
-	kill(info->si_pid, SIGUSR1);
-	// exitfailure
-}
