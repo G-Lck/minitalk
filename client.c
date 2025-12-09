@@ -16,7 +16,7 @@ void	send_char_to_bits(int pid, unsigned char c)
 			kill(pid, SIGUSR2);
 		i++;
 		//signal(SIGUSR1, handler);
-		sleep(1);
+		usleep(500);
 		while (g_ready_to_send == false)
 			pause();
 	}
