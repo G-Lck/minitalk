@@ -9,10 +9,6 @@ SRCS = server.c \
 		client.c \
 		utils.c
 
-BONUS_SRCS = server.c \
-		client.c \
-		utils.c \
-
 INCLUDES	= -I libftprintf -I .
 
 OBJS_SERVER	= server.o utils.o

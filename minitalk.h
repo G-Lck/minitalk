@@ -15,14 +15,26 @@
 
 # define _DEFAULT_SOURCE
 
-# include <stdlib.h>
 # include <unistd.h>
 # include <signal.h>
 # include <sys/types.h>
 # include <stdbool.h>
 # include "libftprintf/libftprintf.h"
 
-int		ft_atoi(const char *nptr);
-void	*ft_memset(void *s, int c, size_t n);
+//-------utils-------//
+
+int				ft_atoi(const char *nptr);
+void			*ft_memset(void *s, int c, size_t n);
+
+//-------server------//
+
+void			set_bits(int signum, int *bits, int *ix);
+unsigned char	bits_to_unsignedchar(int *bits);
+void			write_bits_to_char(int signum, siginfo_t *info, void *context);
+
+//------client-----//
+
+void			send_char_to_bits(int pid, unsigned char c);
+void			handler(int signal);
 
 #endif

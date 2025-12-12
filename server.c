@@ -49,10 +49,12 @@ void	write_bits_to_char(int signum, siginfo_t *info, void *context)
 	if (ix == 8)
 	{
 		c = bits_to_unsignedchar(bits);
+		kill(info->si_pid, SIGUSR1);
 		write(1, &c, 1);
 		if (c == 0)
 			write(1, "\n", 1);
 		ix = 0;
+		return ;
 	}
 	kill(info->si_pid, SIGUSR1);
 }
@@ -73,4 +75,5 @@ int	main(void)
 	ft_printf("Pid : %d\n", getpid());
 	while (1)
 		pause();
+	return (0);
 }
