@@ -1,4 +1,16 @@
-# include "utils.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   server.c       ....                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: glucken <glucken@ent.42lausanne.ch>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/02 16:34:05 by glucken           #+#    #+#             */
+/*   Updated: 2025/10/03 13:52:13 by glucken          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minitalk.h"
 
 void	set_bits(int signum, int *bits, int *ix)
 {
@@ -11,10 +23,10 @@ void	set_bits(int signum, int *bits, int *ix)
 	(*ix)++;
 }
 
-char	bits_to_ascii(int *bits)
+unsigned char	bits_to_unsignedchar(int *bits)
 {
-	int i;
-	int c;
+	int	i;
+	int	c;
 
 	i = 7;
 	c = 0;
@@ -23,29 +35,26 @@ char	bits_to_ascii(int *bits)
 		c = 2 * c + bits[i];
 		i--;
 	}
-	return ((char) c);
+	return ((unsigned char) c);
 }
 
 void	write_bits_to_char(int signum, siginfo_t *info, void *context)
 {
-	static int	ix;
-	static int	bits[8];
-	char	c;
+	static int		ix;
+	static int		bits[8];
+	unsigned char	c;
 
 	(void) context;
 	set_bits(signum, bits, &ix);
 	if (ix == 8)
 	{
-		c = bits_to_ascii(bits);
+		c = bits_to_unsignedchar(bits);
 		write(1, &c, 1);
 		if (c == 0)
 			write(1, "\n", 1);
 		ix = 0;
-		//ft_memset(bits, 0, sizeof(int) * 8);
 	}
-
 	kill(info->si_pid, SIGUSR1);
-	// exitfailure
 }
 
 int	main(void)

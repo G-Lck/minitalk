@@ -359,4 +359,11 @@ then
     done
 fi
 
+################
+# Unicode test #
+################
+
+echo "${L_Green}\n [Unicode]\tSend various UTF-8 characters${NC}"
+$PATH_TO_CLIENT $p_id "Salut 👋 Привет 你好 مرحبا — café naïve 👍🏽 🧪"
+
 echo "\nIf all was corrrectly display on your server terminal: Perfect, well done! 💪"

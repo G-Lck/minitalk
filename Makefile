@@ -9,12 +9,10 @@ SRCS = server.c \
 		client.c \
 		utils.c
 
-BONUS_SRCS = server_bonus.c \
-		client_bonus.c \
+BONUS_SRCS = server.c \
+		client.c \
 		utils.c \
-		utils_2.c
 
-# Derived
 INCLUDES	= -I libftprintf -I .
 
 OBJS_SERVER	= server.o utils.o
@@ -27,7 +25,7 @@ libft: $(LIBFTPRINTF)
 $(LIBFTPRINTF):
 	$(MAKE) -C libftprintf
 
-%.o: %.c utils.h
+%.o: %.c minitalk.h
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(SERVER): $(OBJS_SERVER) $(LIBFTPRINTF)
